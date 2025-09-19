@@ -1,0 +1,30 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-frontend
+  namespace: bookwish
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: book-frontend
+  template:
+    metadata:
+      labels:
+        app: book-frontend
+    spec:
+      containers:
+      - name: book-frontend
+        image: <ECR_FRONTEND>:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: BOOK_API_URL
+          value: "http://book-api.bookwish.svc.cluster.local:5000"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
