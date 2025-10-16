@@ -1,0 +1,8 @@
+namespace: bookwish
+bookApi:
+  image: "REPLACE_WITH_ECR/book-api:latest"
+userService:
+  image: "REPLACE_WITH_ECR/user-service:latest"
+frontend:
+  image: "REPLACE_WITH_ECR/frontend:latest"
+replicaCount: 1

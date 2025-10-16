@@ -1,0 +1,26 @@
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kaniko-build-user-service
+  namespace: bookwish
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      containers:
+      - name: kaniko
+        image: gcr.io/kaniko-project/executor:latest
+        args:
+          - "--dockerfile=/workspace/user-service/Dockerfile"
+          - "--context=git://github.com/MeghuVipparthi/Book-Wishlist-EKS.git#main:user-service"
+          - "--destination=<AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/user-service:latest"
+          - "--snapshotMode=redo"
+        volumeMounts:
+        - name: kaniko-secret
+          mountPath: /kaniko/.docker
+      restartPolicy: Never
+      volumes:
+      - name: kaniko-secret
+        secret:
+          secretName: regcred
